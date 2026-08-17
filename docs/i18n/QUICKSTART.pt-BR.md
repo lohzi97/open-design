@@ -117,7 +117,7 @@ docker compose up -d
 Abra o aplicativo no seu navegador:
 
 ```text
-http://localhost:7456
+http://127.0.0.1:7456
 ```
 
 A primeira inicialização pode levar alguns segundos enquanto o Docker baixa a imagem mais recente.
@@ -235,7 +235,7 @@ ls -la "$OD_BIN"
 
 `OD_DAEMON_URL` precisa ser uma porta de daemon real, como `http://127.0.0.1:7457`, e não `http://127.0.0.1:0`. O `:0` é apenas uma dica interna de "escolha uma porta livre" no launch e não deveria vazar para sessões de agente.
 
-No modo de produção daemon-only, o próprio daemon serve o export estático do Next.js em `http://localhost:7456`, então não há reverse proxy envolvido.
+No modo de produção daemon-only, o próprio daemon serve o export estático do Next.js em `http://127.0.0.1:7456`, então não há reverse proxy envolvido.
 
 Se você colocar nginx na frente do daemon, mantenha as rotas SSE sem buffering e sem compressão. Uma falha comum é o console do navegador mostrar `net::ERR_INCOMPLETE_CHUNKED_ENCODING 200 (OK)` depois de 80–90 segundos, porque o `gzip on` do nginx bufferiza respostas SSE em chunks mesmo quando o daemon envia `X-Accel-Buffering: no`.
 

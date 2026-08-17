@@ -112,3 +112,12 @@ deploy/agent-bins/
 # Python bytecode from workflow helper self-checks / local compile.
 __pycache__/
 *.py[cod]
+
+# Container-local opencode XDG data (copied auth credentials) — secrets, never commit
+deploy/.opencode-xdg-data/
+
+# local repo data
+docker-compose.local.yml
+
+# local temp notes
+.output

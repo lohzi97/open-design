@@ -33,20 +33,27 @@ services:
       # Open Design on the LAN or public IP.
       OD_BIND_HOST: 127.0.0.1
       # Prepend host-bin mounts so the daemon finds agent CLIs before
-      # any container-local stubs.
-      PATH: /mnt/host-local-bin:/mnt/host-opencode:/usr/local/bin:/usr/bin:/bin
+      # any container-local stubs. /mnt/host-nvm/bin covers an npm/nvm
+      # opencode install (symlink + lib/node_modules live under the same
+      # version prefix, so mount the whole prefix, not just bin/).
+      PATH: /mnt/host-nvm/bin:/mnt/host-local-bin:/usr/local/bin:/usr/bin:/bin
+      # Point opencode's XDG data home at a writable container-local dir that
+      # carries copied host credentials (auth.json/account.json). Keeps the
+      # host's multi-GB opencode.db untouched and avoids uid mismatch on the
+      # host's 0600 files. Re-copy after re-authenticating opencode on the host.
+      XDG_DATA_HOME: /opencode-xdg-data
       # API keys for agent CLIs. Leave blank to omit.
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
     volumes:
       - ${HOME}/.local/bin:/mnt/host-local-bin:ro
-      - ${HOME}/.opencode/bin:/mnt/host-opencode:ro
-      # Claude Code versioned binaries — mounted at the same absolute path as the host
-      # so the ~/.local/bin/claude symlink resolves correctly inside the container.
-      - ${HOME}/.local/share/claude:${HOME}/.local/share/claude:ro
-      # Claude Code credentials — read-only; never written inside the container.
-      - ${HOME}/.claude:/home/open-design/.claude:ro
+      # npm/nvm opencode install: bin/opencode symlinks into
+      # lib/node_modules/opencode-ai/bin/opencode.exe, so the whole version
+      # prefix must be mounted for the symlink to resolve.
+      - ${HOME}/.nvm/versions/node/v24.14.0:/mnt/host-nvm:ro
+      # Writable opencode XDG data with copied credentials (see XDG_DATA_HOME).
+      - ./.opencode-xdg-data:/opencode-xdg-data
       # Full glibc for CLIs that exceed what libc6-compat (gcompat) covers.
       # amd64 only — on arm64 replace with /lib/aarch64-linux-gnu:/lib/aarch64-linux-gnu:ro
       - /lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:ro

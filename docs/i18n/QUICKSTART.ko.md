@@ -79,7 +79,7 @@ docker compose up -d
 브라우저에서 앱을 엽니다.
 
 ```text
-http://localhost:7456
+http://127.0.0.1:7456
 ```
 
 처음 시작할 때는 Docker가 최신 이미지를 받아오느라 몇 초 걸릴 수 있습니다.
@@ -239,7 +239,7 @@ ls -la "$OD_BIN"
 
 `OD_DAEMON_URL`은 `http://127.0.0.1:7457`처럼 실제 daemon 포트여야 하며, `http://127.0.0.1:0`이어서는 안 됩니다. `:0` 값은 "빈 포트를 골라라"라는 내부 실행 힌트일 뿐이라, 에이전트 세션으로 새어 나가면 안 됩니다.
 
-daemon 단독 프로덕션 모드에서는 daemon이 정적 Next.js export를 `http://localhost:7456`에서 직접 서빙하므로, reverse proxy가 끼어들지 않습니다.
+daemon 단독 프로덕션 모드에서는 daemon이 정적 Next.js export를 `http://127.0.0.1:7456`에서 직접 서빙하므로, reverse proxy가 끼어들지 않습니다.
 
 daemon 앞에 nginx를 둔다면, SSE 경로는 버퍼링과 압축을 끄세요. 흔한 실패는 80~90초 뒤 브라우저 콘솔에 `net::ERR_INCOMPLETE_CHUNKED_ENCODING 200 (OK)`가 뜨는 경우입니다. daemon이 `X-Accel-Buffering: no`를 보내도 nginx의 `gzip on`이 청크 SSE 응답을 버퍼링하기 때문입니다.
 

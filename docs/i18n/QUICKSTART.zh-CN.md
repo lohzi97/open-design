@@ -117,7 +117,7 @@ docker compose up -d
 在浏览器中打开应用：
 
 ```text
-http://localhost:7456
+http://127.0.0.1:7456
 ```
 
 首次启动可能需要几秒钟，Docker 会拉取最新镜像。
@@ -235,7 +235,7 @@ ls -la "$OD_BIN"
 
 `OD_DAEMON_URL` 必须为真实的 daemon 端口，例如 `http://127.0.0.1:7457`，而非 `http://127.0.0.1:0`。`:0` 仅是内部用于"自动选择可用端口"的启动占位值，不应泄露到 agent 会话中。
 
-仅运行 daemon 的生产模式下，daemon 会自行在 `http://localhost:7456` 提供 Next.js 的静态导出产物，不经过反向代理。
+仅运行 daemon 的生产模式下，daemon 会自行在 `http://127.0.0.1:7456` 提供 Next.js 的静态导出产物，不经过反向代理。
 
 若在 daemon 前部署了 nginx，请关闭 SSE 路由的 buffering 与压缩。常见问题：浏览器控制台在 80-90 秒后报错 `net::ERR_INCOMPLETE_CHUNKED_ENCODING 200 (OK)`——原因是 nginx 的 `gzip on` 会缓冲分块的 SSE 响应，即使 daemon 已发送 `X-Accel-Buffering: no`。
 
